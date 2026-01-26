@@ -7,7 +7,7 @@ function getParam(key) {
 // ================= CUSTOM SETTINGS =================
 
 const YOUR_NAME = "Rudra";
-const GIRL_NAME = getParam("name") || "Aarohi";
+const GIRL_NAME = getParam("name") || "Ash";
 const CUSTOM_MESSAGE = "Everyone deserves a second chance... us too... please 🥺";
 
 // 🔥 Discord Webhook URL

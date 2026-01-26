@@ -3,11 +3,14 @@ function getParam(key) {
   const value = params.get(key);
   return value ? decodeURIComponent(value) : null;
 }
+
 // 🔥 Discord Webhook URL
 const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1465364757480608040/fQ9dXbZvLurEeYuvUciQUuPpF8QXUhxUdHjE-oBFbr2PgEOAwd2vyCUGBZdtWmABsjv_";
 
 // ===== CUSTOM SETTINGS =====
-const GIRL_NAME = getParam("name") || "Ash"; // change name here
+const GIRL_NAME = getParam("name") || "Ash";
+const YOUR_NAME = getParam("you") || "Someone";
+const HER_NAME = GIRL_NAME;
 const MESSAGE_TEXT = "Everyone deserves a second chance... us too... please 🥺";
 // ===========================
 
@@ -46,7 +49,8 @@ setInterval(createHeart, 260);
 
 // Background Music 🎵
 document.body.addEventListener("click", () => {
-  document.getElementById("bgMusic").play();
+  const music = document.getElementById("bgMusic");
+  if (music) music.play();
 }, { once: true });
 
 const buttonsBox = document.querySelector(".buttons");
@@ -64,67 +68,11 @@ const noTexts = [
 
 let noIndex = 0;
 
-noBtn.addEventListener("click", () => {
-  // move to next text
-  noIndex = (noIndex + 1) % noTexts.length; // 🔁 LOOP HERE
-
-  noBtn.innerText = noTexts[noIndex];
-
-  // Apple-style micro animation 🍎
-  noBtn.style.transform = "scale(1.06)";
-  noBtn.style.boxShadow = "0 0 18px rgba(255,45,85,0.6)";
-
-  setTimeout(() => {
-    noBtn.style.transform = "scale(1)";
-    noBtn.style.boxShadow = "0 6px 16px rgba(0,0,0,0.25)";
-  }, 200);
-});
-
-
-// YES Button 💘
-document.getElementById("yesBtn").addEventListener("click", () => {
-  const meter = document.getElementById("meterFill");
-
-  // Gradual Love Meter 📊
-  let progress = 0;
-  const interval = setInterval(() => {
-    progress += 2;
-    meter.style.width = progress + "%";
-    if (progress >= 100) clearInterval(interval);
-  }, 35);
-
-  // Confetti 🎆
-  confetti({ particleCount: 220, spread: 120, origin: { y: 0.6 } });
-
-  // Final Screen 💞
-  setTimeout(() => {
-    document.body.innerHTML = `
-      <div class="final-screen">
-        <h1>
-          ${HER_NAME} said YES 😍💖<br>
-          Love unlocked 🔓❤️
-        </h1>
-      </div>
-    `;
-  }, 2200);
-});
 // Unique session ID
 const SESSION_ID = Math.random().toString(36).substring(2, 10);
 
 // Start time
 const startTime = Date.now();
-
-// Analytics data
-let analytics = {
-  sessionId: SESSION_ID,
-  girlName: GIRL_NAME,
-  yourName: YOUR_NAME,
-  noClicks: 0,
-  yesClicked: false,
-  messages: [],
-  device: getDeviceInfo(),
-  timeline: []
-};
 
 // Device info (safe)
 function getDeviceInfo() {
@@ -140,6 +88,18 @@ function now() {
   return new Date().toLocaleString();
 }
 
+// Analytics data
+let analytics = {
+  sessionId: SESSION_ID,
+  girlName: GIRL_NAME,
+  yourName: YOUR_NAME,
+  noClicks: 0,
+  yesClicked: false,
+  messages: [],
+  device: getDeviceInfo(),
+  timeline: []
+};
+
 // Add event to timeline
 function logEvent(event) {
   analytics.timeline.push({
@@ -147,7 +107,25 @@ function logEvent(event) {
     event
   });
 }
-// ================= DISCORD WEBHOOK (ADVANCED) =================
+
+// NO button logic
+noBtn.addEventListener("click", () => {
+  analytics.noClicks++;
+  logEvent("Clicked NO");
+
+  noIndex = (noIndex + 1) % noTexts.length;
+  noBtn.innerText = noTexts[noIndex];
+
+  noBtn.style.transform = "scale(1.06)";
+  noBtn.style.boxShadow = "0 0 18px rgba(255,45,85,0.6)";
+
+  setTimeout(() => {
+    noBtn.style.transform = "scale(1)";
+    noBtn.style.boxShadow = "0 6px 16px rgba(0,0,0,0.25)";
+  }, 200);
+});
+
+// ================= DISCORD WEBHOOK =================
 
 function sendDiscordReport(result) {
   const duration = Math.floor((Date.now() - startTime) / 1000);
@@ -169,12 +147,10 @@ function sendDiscordReport(result) {
 
       { name: "🧠 Behavior", value: analytics.noClicks > 2 ? "Hesitated 💔" : "Fast Decision 💖", inline: false },
 
-      { name: "💬 Chat History", value: "```" + analytics.messages.join("\n") + "```", inline: false },
-
       { name: "📜 Timeline", value: "```" + analytics.timeline.map(e => `${e.time} - ${e.event}`).join("\n") + "```", inline: false }
     ],
     footer: {
-      text: "Advanced Valentine Analytics System 💻"
+      text: "Valentine Analytics System 💻"
     }
   };
 
@@ -185,5 +161,38 @@ function sendDiscordReport(result) {
       username: "Valentine Tracker 🤖",
       embeds: [embed]
     })
-  });
+  }).catch(err => console.error("Discord webhook error:", err));
 }
+
+// YES Button 💘
+document.getElementById("yesBtn").addEventListener("click", () => {
+  analytics.yesClicked = true;
+  logEvent("Clicked YES");
+
+  const meter = document.getElementById("meterFill");
+
+  let progress = 0;
+  const interval = setInterval(() => {
+    progress += 2;
+    meter.style.width = progress + "%";
+    if (progress >= 100) clearInterval(interval);
+  }, 35);
+
+  if (typeof confetti !== "undefined") {
+    confetti({ particleCount: 220, spread: 120, origin: { y: 0.6 } });
+  }
+
+  // ✅ SEND DISCORD NOTIFICATION
+  sendDiscordReport("YES");
+
+  setTimeout(() => {
+    document.body.innerHTML = `
+      <div class="final-screen">
+        <h1>
+          ${HER_NAME} said YES 😍💖<br>
+          Love unlocked 🔓❤️
+        </h1>
+      </div>
+    `;
+  }, 2200);
+});

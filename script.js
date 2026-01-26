@@ -8,7 +8,7 @@ function getParam(key) {
 const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1465364757480608040/fQ9dXbZvLurEeYuvUciQUuPpF8QXUhxUdHjE-oBFbr2PgEOAwd2vyCUGBZdtWmABsjv_";
 
 // ===== CUSTOM SETTINGS =====
-const GIRL_NAME = getParam("name") || "Ash";
+const GIRL_NAME = getParam("name") || "Piona";
 const YOUR_NAME = getParam("you") || "Someone";
 const HER_NAME = GIRL_NAME;
 const MESSAGE_TEXT = "Everyone deserves a second chance... us too... please 🥺";

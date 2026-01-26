@@ -5,6 +5,8 @@ import string
 import qrcode
 from io import BytesIO
 import os
+import os
+print("TOKEN FOUND:", os.getenv("DISCORD_TOKEN"))
 
 TOKEN = os.getenv("DISCORD_TOKEN")
 

@@ -5,7 +5,7 @@ import string
 import qrcode
 from io import BytesIO
 import os
-import os
+
 print("TOKEN FOUND:", os.getenv("DISCORD_TOKEN"))
 
 TOKEN = os.getenv("DISCORD_TOKEN")
@@ -29,7 +29,9 @@ async def on_ready():
 async def valentine(interaction: discord.Interaction, name: str):
     
     unique_id = generate_id()
-    link = f"https://your-site.com/v/{unique_id}"
+
+    # ✅ YOUR WEBSITE LINK (UPDATED)
+    link = f"https://valentinelove.vercel.app/?name={name}&id={unique_id}"
 
     # Generate QR Code
     qr = qrcode.make(link)
@@ -42,8 +44,9 @@ async def valentine(interaction: discord.Interaction, name: str):
     message = f"""
 💌 **Valentine Link Created!**
 
-Name: **{name}**
-Link: {link}
+👧 Name: **{name}**
+🔗 Link: {link}
+🆔 ID: `{unique_id}`
 """
 
     await interaction.response.send_message(message, file=file)

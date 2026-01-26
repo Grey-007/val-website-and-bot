@@ -11,7 +11,7 @@ const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1465364757480608040/fQ
 const GIRL_NAME = getParam("name") || "Ash";
 const YOUR_NAME = getParam("you") || "Someone";
 const HER_NAME = GIRL_NAME;
-const MESSAGE_TEXT = "Everyone deserves a second chance... us too... please 🥺";
+const MESSAGE_TEXT = "Everyone deserves a chance... us too... please 🥺";
 // ===========================
 
 // Cinematic Intro 🎬

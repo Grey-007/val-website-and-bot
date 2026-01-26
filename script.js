@@ -1,6 +1,14 @@
+function getParam(key) {
+  const params = new URLSearchParams(window.location.search);
+  const value = params.get(key);
+  return value ? decodeURIComponent(value) : null;
+}
+// 🔥 Discord Webhook URL
+const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1465364757480608040/fQ9dXbZvLurEeYuvUciQUuPpF8QXUhxUdHjE-oBFbr2PgEOAwd2vyCUGBZdtWmABsjv_";
+
 // ===== CUSTOM SETTINGS =====
-const HER_NAME = "Piona"; // change name here
-const MESSAGE_TEXT = "Everyone deserves a chance... us too... please 🥺";
+const GIRL_NAME = getParam("name") || "Ash"; // change name here
+const MESSAGE_TEXT = "Everyone deserves a second chance... us too... please 🥺";
 // ===========================
 
 // Cinematic Intro 🎬
@@ -100,3 +108,82 @@ document.getElementById("yesBtn").addEventListener("click", () => {
     `;
   }, 2200);
 });
+// Unique session ID
+const SESSION_ID = Math.random().toString(36).substring(2, 10);
+
+// Start time
+const startTime = Date.now();
+
+// Analytics data
+let analytics = {
+  sessionId: SESSION_ID,
+  girlName: GIRL_NAME,
+  yourName: YOUR_NAME,
+  noClicks: 0,
+  yesClicked: false,
+  messages: [],
+  device: getDeviceInfo(),
+  timeline: []
+};
+
+// Device info (safe)
+function getDeviceInfo() {
+  return {
+    type: /Mobi|Android/i.test(navigator.userAgent) ? "Mobile 📱" : "Desktop 💻",
+    browser: navigator.userAgent.split(") ")[0] + ")",
+    screen: `${window.innerWidth}x${window.innerHeight}`
+  };
+}
+
+// Time helper
+function now() {
+  return new Date().toLocaleString();
+}
+
+// Add event to timeline
+function logEvent(event) {
+  analytics.timeline.push({
+    time: now(),
+    event
+  });
+}
+// ================= DISCORD WEBHOOK (ADVANCED) =================
+
+function sendDiscordReport(result) {
+  const duration = Math.floor((Date.now() - startTime) / 1000);
+
+  const embed = {
+    title: "🧠 Valentine Interaction Report",
+    color: result === "YES" ? 0xff2d55 : 0x555555,
+    fields: [
+      { name: "💘 Result", value: result === "YES" ? "YES ❤️" : "NO 💔", inline: true },
+      { name: "🆔 Session ID", value: analytics.sessionId, inline: true },
+      { name: "⏱ Duration", value: duration + " sec", inline: true },
+
+      { name: "👧 Girl", value: GIRL_NAME, inline: true },
+      { name: "👦 You", value: YOUR_NAME, inline: true },
+      { name: "📊 No Clicks", value: analytics.noClicks.toString(), inline: true },
+
+      { name: "💻 Device", value: analytics.device.type, inline: true },
+      { name: "🖥 Screen", value: analytics.device.screen, inline: true },
+
+      { name: "🧠 Behavior", value: analytics.noClicks > 2 ? "Hesitated 💔" : "Fast Decision 💖", inline: false },
+
+      { name: "💬 Chat History", value: "```" + analytics.messages.join("\n") + "```", inline: false },
+
+      { name: "📜 Timeline", value: "```" + analytics.timeline.map(e => `${e.time} - ${e.event}`).join("\n") + "```", inline: false }
+    ],
+    footer: {
+      text: "Advanced Valentine Analytics System 💻"
+    }
+  };
+
+  fetch(DISCORD_WEBHOOK, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      username: "Valentine Tracker 🤖",
+      embeds: [embed]
+    })
+  });
+}

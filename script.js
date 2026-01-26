@@ -1,11 +1,17 @@
+function getParam(key) {
+  const params = new URLSearchParams(window.location.search);
+  const value = params.get(key);
+  return value ? decodeURIComponent(value) : null;
+}
+
 // ================= CUSTOM SETTINGS =================
 
 const YOUR_NAME = "Rudra";
-const GIRL_NAME = "Piona";
+const GIRL_NAME = getParam("name") || "Aarohi";
 const CUSTOM_MESSAGE = "Everyone deserves a second chance... us too... please 🥺";
 
-// 🔥 Discord Webhook URL
-const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1464670406806995111/ZWJy6IRIVQ0heEY2pX0hthHJP56G6SGf5oRZL1g46sLsThIDqnW3KgQLXy0aPPaOXjuX";
+// Backend API URL (NOT Discord webhook)
+const BACKEND_API = "http://127.0.0.1:5000/webhook";
 
 // ===================================================
 
@@ -35,7 +41,7 @@ let analytics = {
   timeline: []
 };
 
-// Device info (safe)
+// Device info
 function getDeviceInfo() {
   return {
     type: /Mobi|Android/i.test(navigator.userAgent) ? "Mobile 📱" : "Desktop 💻",
@@ -49,7 +55,7 @@ function now() {
   return new Date().toLocaleString();
 }
 
-// Add event to timeline
+// Timeline logger
 function logEvent(event) {
   analytics.timeline.push({
     time: now(),
@@ -80,48 +86,34 @@ function hideTyping() {
   typingBubble.style.display = "none";
 }
 
-// ================= DISCORD WEBHOOK (ADVANCED) =================
+// ================= SEND DATA TO BACKEND =================
 
 function sendDiscordReport(result) {
   const duration = Math.floor((Date.now() - startTime) / 1000);
 
-  const embed = {
-    title: "🧠 Valentine Interaction Report",
-    color: result === "YES" ? 0xff2d55 : 0x555555,
-    fields: [
-      { name: "💘 Result", value: result === "YES" ? "YES ❤️" : "NO 💔", inline: true },
-      { name: "🆔 Session ID", value: analytics.sessionId, inline: true },
-      { name: "⏱ Duration", value: duration + " sec", inline: true },
-
-      { name: "👧 Girl", value: GIRL_NAME, inline: true },
-      { name: "👦 You", value: YOUR_NAME, inline: true },
-      { name: "📊 No Clicks", value: analytics.noClicks.toString(), inline: true },
-
-      { name: "💻 Device", value: analytics.device.type, inline: true },
-      { name: "🖥 Screen", value: analytics.device.screen, inline: true },
-
-      { name: "🧠 Behavior", value: analytics.noClicks > 2 ? "Hesitated 💔" : "Fast Decision 💖", inline: false },
-
-      { name: "💬 Chat History", value: "```" + analytics.messages.join("\n") + "```", inline: false },
-
-      { name: "📜 Timeline", value: "```" + analytics.timeline.map(e => `${e.time} - ${e.event}`).join("\n") + "```", inline: false }
-    ],
-    footer: {
-      text: "Advanced Valentine Analytics System 💻"
-    }
+  const payload = {
+    result: result,
+    sessionId: analytics.sessionId,
+    girlName: GIRL_NAME,
+    yourName: YOUR_NAME,
+    duration: duration,
+    noClicks: analytics.noClicks,
+    device: analytics.device,
+    messages: analytics.messages,
+    timeline: analytics.timeline
   };
 
-  fetch(DISCORD_WEBHOOK, {
+  fetch(BACKEND_API, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      username: "Valentine Tracker 🤖",
-      embeds: [embed]
-    })
-  });
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  })
+  .catch(err => console.error("Backend error:", err));
 }
 
-// ================= CHAT FLOW (GIRL POV) =================
+// ================= CHAT FLOW =================
 
 setTimeout(showTyping, 800);
 setTimeout(() => {

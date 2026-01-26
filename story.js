@@ -1,3 +1,30 @@
+const WEBHOOK_URL = "https://discord.com/api/webhooks/1465375212911722790/DzagcCoYs6YqTHO_y9MhB7Ys6gcrBMD24gvEfPgqcDsQN3rl3oARM-hGvdDDDOd7Plhc";
+let webhookSent = false;
+
+async function sendYesWebhook() {
+  if (!WEBHOOK_URL || webhookSent) return;
+  webhookSent = true;
+
+  const params = new URLSearchParams(window.location.search);
+  const name = params.get("name") || "Unknown";
+
+  const payload = {
+    content: `💖 Valentine Accepted!\nName: ${name}\nLink: ${window.location.href}`
+  };
+
+  try {
+    await fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+  } catch (e) {
+    console.error("Webhook failed:", e);
+  }
+}
+
+
+
 const story = {
   start: {
     text: [
@@ -76,13 +103,13 @@ const story = {
 
   no3: {
     text: [
-      "Maybe in another life…",
-      "I would have confessed earlier.",
-      "And maybe… you would have chosen me.",
+      "Please , please , please…",
+      "Please rethink ur decision.",
+      "Please reconsider everything .",
       "",
-      "Goodbye."
+      "Please."
     ],
-    choices: []
+    choices: [{ text: "Continue", next: "no1" }]
   }
 };
 
@@ -100,7 +127,13 @@ async function showScene(key) {
   story[key].choices.forEach(choice => {
     const btn = document.createElement("button");
     btn.innerText = choice.text;
-    btn.onclick = () => showScene(choice.next);
+    btn.onclick = () => {
+      if (choice.next === "yes1") {
+       sendYesWebhook(); // only YES triggers webhook
+      }
+      showScene(choice.next);
+        };
+
     buttonsEl.appendChild(btn);
   });
 }

@@ -11,7 +11,7 @@ const GIRL_NAME = getParam("name") || "Piona";
 const CUSTOM_MESSAGE = "Everyone deserves a second chance... us too... please 🥺";
 
 // 🔥 Discord Webhook URL
-const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1464670406806995111/ZWJy6IRIVQ0heEY2pX0hthHJP56G6SGf5oRZL1g46sLsThIDqnW3KgQLXy0aPPaOXjuX";
+const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/YOUR_WEBHOOK_URL_HERE";
 
 // ===================================================
 

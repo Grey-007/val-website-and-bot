@@ -1,4 +1,4 @@
-const WEBHOOK_URL = "https://discord.com/api/webhooks/1465375212911722790/DzagcCoYs6YqTHO_y9MhB7Ys6gcrBMD24gvEfPgqcDsQN3rl3oARM-hGvdDDDOd7Plhc";
+const WEBHOOK_URL = "https://discord.com/api/webhooks/YOUR_WEBHOOK_URL_HERE";
 let webhookSent = false;
 
 async function sendYesWebhook() {

@@ -5,7 +5,7 @@ function getParam(key) {
 }
 
 // 🔥 Discord Webhook URL
-const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1465364757480608040/fQ9dXbZvLurEeYuvUciQUuPpF8QXUhxUdHjE-oBFbr2PgEOAwd2vyCUGBZdtWmABsjv_";
+const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/YOUR_WEBHOOK_URL_HERE";
 
 // ===== CUSTOM SETTINGS =====
 const GIRL_NAME = getParam("name") || "Piona";

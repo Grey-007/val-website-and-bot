@@ -1,0 +1,148 @@
+* {
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Poppins", sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #111;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Phone UI */
+.phone {
+  width: 360px;
+  height: 640px;
+  background: #0b141a;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.header {
+  background: #1f2c33;
+  padding: 10px 12px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff4d6d, #ff9aa2);
+}
+
+.name {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.status {
+  font-size: 11px;
+  color: #25d366;
+  margin-left: 46px;
+}
+
+/* Chat Area */
+.chat {
+  flex: 1;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+}
+
+/* Chat bubbles */
+.bubble {
+  max-width: 75%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.4;
+  animation: fadeIn 0.25s ease;
+}
+
+/* LEFT = YOU (because girl POV) */
+.left {
+  background: #1f2c33;
+  color: white;
+  align-self: flex-start;
+}
+
+/* RIGHT = HER */
+.right {
+  background: #005c4b;
+  color: white;
+  align-self: flex-end;
+}
+
+.typing {
+  opacity: 0.6;
+  font-style: italic;
+}
+
+/* Buttons */
+.options {
+  padding: 10px;
+  background: #111b21;
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 999px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+#yesBtn {
+  background: linear-gradient(135deg, #25d366, #128c7e);
+  color: white;
+}
+
+#noBtn {
+  background: white;
+  color: #ff2d55;
+  font-weight: 500;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Typing dots */
+.typing::after {
+  content: " .";
+  animation: dots 1.2s infinite;
+}
+
+@keyframes dots {
+  0% { content: " ."; }
+  33% { content: " .."; }
+  66% { content: " ..."; }
+}

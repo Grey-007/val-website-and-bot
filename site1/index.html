@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Be My Valentine 💖</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Cinematic Intro -->
+<div class="intro" id="intro">
+  <h1>For Someone Special 💖</h1>
+</div>
+
+<div class="container hidden" id="card">
+  <h1 class="heartbeat">Will you be my Valentine? 💓</h1>
+  <p id="typing"></p>
+
+  <img class="gif" src="assets/gif.gif" alt="cute gif">
+
+  <!-- Love Meter -->
+  <div class="meter">
+    <div class="meter-fill" id="meterFill"></div>
+  </div>
+  <p class="meter-text">Love Meter 💖</p>
+
+  <div class="buttons">
+    <button id="yesBtn">Yes ❤️</button>
+    <button id="noBtn">No 💔</button>
+  </div>
+</div>
+
+<audio id="bgMusic" loop>
+  <source src="assets/music.mp3" type="audio/mpeg">
+</audio>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
